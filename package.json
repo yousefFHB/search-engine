@@ -1,0 +1,23 @@
+{
+  "name": "web-crawler",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "start": "node server.js",
+    "cli": "node main.js",
+    "crawl:mdn": "node main.js crawl https://developer.mozilla.org/en-US/docs/Web/JavaScript 50 5 data",
+    "ui": "node server.js",
+    "search": "node main.js search",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^30.4.2"
+  },
+  "dependencies": {
+    "jsdom": "26.1.0"
+  }
+}

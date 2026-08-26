@@ -8,6 +8,11 @@ search corpus. Searches run against local JSON files, not live websites.
 
 i have used my own webcrawler project and impleneted it into this .
 
+## Demo
+
+[![Demo of the mini search engine](public/demo-preview.png)](public/Record_2026_08_26_11_09_48_286.mp4)
+
+[Watch the demo video](public/Record_2026_08_26_11_09_48_286.mp4)
 
 ## Features
 

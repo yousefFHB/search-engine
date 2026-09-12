@@ -89,30 +89,36 @@ The project connects ingestion, indexing, and retrieval across discrete decouple
 
 ```mermaid
 flowchart TD
-    A[Seed URL / Web Site] -->|crawlSite| B[Async Concurrent Crawler]
-    B -->|URL Normalization & Scope Check| C{In Scope?}
-    C -->|No| D[Discard / Skip]
-    C -->|Yes| E[Fetch HTML & Detect Broken Links]
-    E -->|JSDOM Parser| F[Sanitize HTML & Extract Document Fields]
-    F -->|Count Inbound Edges| G[documents.json]
-    G -->|buildInvertedIndex| H[Tokenizer & Stop-Word Filter]
-    H -->|Field Weighting & DF/IDF Math| I[inverted-index.json]
-    B -->|Metadata & Inbound Counts| J[crawl-metadata.json]
+    A["Seed URL / Web Site"] -->|crawlSite| B["Async Concurrent Crawler"]
+    B -->|URL Normalization & Scope Check| C{"In Scope?"}
+    C -->|No| D["Discard / Skip"]
+    C -->|Yes| E["Fetch HTML & Detect Broken Links"]
+    E -->|JSDOM Parser| F["Sanitize HTML & Extract Document Fields"]
+    F -->|Count Inbound Edges| G["documents.json"]
+    G -->|buildInvertedIndex| H["Tokenizer & Stop-Word Filter"]
+    H -->|Field Weighting & DF/IDF Math| I["inverted-index.json"]
+    B -->|Metadata & Inbound Counts| J["crawl-metadata.json"]
     
-    subgraph Storage Layer
+    subgraph Storage["Storage Layer (data/)"]
         G
         I
         J
     end
 
-    subgraph Query & Serving Layer
-        K[Native HTTP Server<br/>server.js] -->|loadSearchData| Storage Layer
-        L[Web Browser UI<br/>public/app.js] -->|GET /api/search| K
-        L -->|GET /api/stats| K
-        M[CLI Search Tool<br/>main.js] -->|searchDocuments| Storage Layer
-        K -->|TF-IDF Scoring & Snippet Windowing| L
-        M -->|Ranked Output & Snippets| N[Terminal Output]
+    subgraph Serving["Query & Serving Layer"]
+        K["Native HTTP Server (server.js)"]
+        L["Web Browser UI (public/app.js)"]
+        M["CLI Search Tool (main.js)"]
+        N["Terminal Output"]
     end
+
+    K -->|loadSearchData| G
+    K -->|loadSearchData| I
+    M -->|searchDocuments| I
+    L -->|"GET /api/search"| K
+    L -->|"GET /api/stats"| K
+    K -->|Ranked Results & Snippets| L
+    M -->|Ranked Results| N
 ```
 
 ### Corpus & Index Schemas
